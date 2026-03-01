@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, HelpCircle, MessageSquare, Phone, Mail, ChevronRight, Search, Info } from 'lucide-react';
+import { hapticFeedback } from '../../lib/haptics';
 
 const HelpSupport = () => {
   const navigate = useNavigate();
@@ -13,11 +14,21 @@ const HelpSupport = () => {
     'Troubleshooting video feed'
   ];
 
+  const handleBack = () => {
+    hapticFeedback.light();
+    navigate(-1);
+  };
+
+  const handleAction = (action: string) => {
+    hapticFeedback.medium();
+    alert(`${action} feature coming soon!`);
+  };
+
   return (
     <div className="flex-1 flex flex-col bg-slate-50">
       <div className="bg-white p-6 border-b border-slate-100">
         <div className="flex items-center gap-4 mb-2">
-          <button onClick={() => navigate(-1)} className="p-1">
+          <button onClick={handleBack} className="p-1">
             <ChevronLeft className="w-6 h-6 text-slate-600" />
           </button>
           <h2 className="text-xl font-bold">Help & Support</h2>
@@ -34,13 +45,19 @@ const HelpSupport = () => {
         <div className="space-y-4">
           <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-2">Contact Us</h3>
           <div className="grid grid-cols-2 gap-4">
-            <button className="bg-white p-6 rounded-3xl border border-slate-100 flex flex-col items-center gap-3 hover:shadow-md transition-all">
+            <button 
+              onClick={() => handleAction('Live Chat')}
+              className="bg-white p-6 rounded-3xl border border-slate-100 flex flex-col items-center gap-3 hover:shadow-md transition-all active:scale-95"
+            >
               <div className="w-12 h-12 bg-blue-50 text-primary rounded-2xl flex items-center justify-center">
                 <MessageSquare className="w-6 h-6" />
               </div>
               <span className="text-xs font-bold text-slate-700">Live Chat</span>
             </button>
-            <button className="bg-white p-6 rounded-3xl border border-slate-100 flex flex-col items-center gap-3 hover:shadow-md transition-all">
+            <button 
+              onClick={() => handleAction('Call Support')}
+              className="bg-white p-6 rounded-3xl border border-slate-100 flex flex-col items-center gap-3 hover:shadow-md transition-all active:scale-95"
+            >
               <div className="w-12 h-12 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center">
                 <Phone className="w-6 h-6" />
               </div>
@@ -53,7 +70,11 @@ const HelpSupport = () => {
           <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-2">Frequently Asked Questions</h3>
           <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
             {faqs.map((faq, i) => (
-              <button key={i} className="w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0">
+              <button 
+                key={i} 
+                onClick={() => handleAction(faq)}
+                className="w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0 active:bg-slate-100"
+              >
                 <span className="text-xs font-bold text-slate-600">{faq}</span>
                 <ChevronRight className="w-4 h-4 text-slate-300" />
               </button>
@@ -68,7 +89,12 @@ const HelpSupport = () => {
           <div className="space-y-1">
             <h4 className="text-sm font-bold text-slate-800">User Manual</h4>
             <p className="text-[10px] text-slate-500 leading-relaxed">Download the full guide to master your Dvaari system.</p>
-            <button className="text-[10px] font-bold text-primary uppercase tracking-widest pt-1">Download PDF</button>
+            <button 
+              onClick={() => handleAction('Download PDF')}
+              className="text-[10px] font-bold text-primary uppercase tracking-widest pt-1 hover:underline active:scale-95"
+            >
+              Download PDF
+            </button>
           </div>
         </div>
       </div>

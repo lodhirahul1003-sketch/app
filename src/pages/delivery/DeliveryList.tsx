@@ -13,10 +13,26 @@ import {
   Activity
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import { hapticFeedback } from '../../lib/haptics';
 
 const DeliveryList = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'active' | 'history'>('active');
+
+  const handleBack = () => {
+    hapticFeedback.light();
+    navigate('/dashboard');
+  };
+
+  const handleTabChange = (tab: 'active' | 'history') => {
+    hapticFeedback.light();
+    setActiveTab(tab);
+  };
+
+  const handleNavigate = (path: string) => {
+    hapticFeedback.light();
+    navigate(path);
+  };
 
   const activeDeliveries = [
     {
@@ -70,16 +86,16 @@ const DeliveryList = () => {
       <div className="bg-primary p-6 pb-12 rounded-b-[40px] relative">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/dashboard')} className="p-1">
+            <button onClick={handleBack} className="p-1">
               <ChevronLeft className="w-6 h-6 text-white" />
             </button>
             <h2 className="text-xl font-bold text-white">Delivery</h2>
           </div>
           <div className="flex items-center gap-3">
-            <button onClick={() => navigate('/dvaari-box')} className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/10">
+            <button onClick={() => handleNavigate('/dvaari-box')} className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/10">
               <Clock className="w-5 h-5 text-white" />
             </button>
-            <button onClick={() => navigate('/settings')} className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/10">
+            <button onClick={() => handleNavigate('/settings')} className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/10">
               <Settings className="w-5 h-5 text-white" />
             </button>
           </div>
@@ -93,7 +109,7 @@ const DeliveryList = () => {
       <div className="px-6 -mt-6">
         <div className="bg-white p-1.5 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 flex gap-2">
           <button 
-            onClick={() => setActiveTab('active')}
+            onClick={() => handleTabChange('active')}
             className={cn(
               "flex-1 py-3 rounded-xl text-xs font-bold transition-all",
               activeTab === 'active' ? "bg-primary text-white shadow-lg shadow-primary/20" : "text-slate-400 hover:bg-slate-50"
@@ -102,7 +118,7 @@ const DeliveryList = () => {
             Active
           </button>
           <button 
-            onClick={() => setActiveTab('history')}
+            onClick={() => handleTabChange('history')}
             className={cn(
               "flex-1 py-3 rounded-xl text-xs font-bold transition-all",
               activeTab === 'history' ? "bg-primary text-white shadow-lg shadow-primary/20" : "text-slate-400 hover:bg-slate-50"
@@ -193,23 +209,23 @@ const DeliveryList = () => {
 
       {/* Bottom Nav */}
       <div className="fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto bg-white border-t border-slate-100 p-4 flex justify-around items-center z-30">
-        <button onClick={() => navigate('/dashboard')} className="flex flex-col items-center gap-1 text-slate-400">
+        <button onClick={() => handleNavigate('/dashboard')} className="flex flex-col items-center gap-1 text-slate-400">
           <HomeIcon className="w-5 h-5" />
           <span className="text-[10px] font-bold">Home</span>
         </button>
-        <button onClick={() => navigate('/family')} className="flex flex-col items-center gap-1 text-slate-400">
+        <button onClick={() => handleNavigate('/family')} className="flex flex-col items-center gap-1 text-slate-400">
           <Users className="w-5 h-5" />
           <span className="text-[10px] font-bold">Members</span>
         </button>
-        <button onClick={() => navigate('/delivery')} className="flex flex-col items-center gap-1 text-primary">
+        <button onClick={() => handleNavigate('/delivery')} className="flex flex-col items-center gap-1 text-primary">
           <Package className="w-5 h-5" />
           <span className="text-[10px] font-bold">Delivery</span>
         </button>
-        <button onClick={() => navigate('/analytics')} className="flex flex-col items-center gap-1 text-slate-400">
+        <button onClick={() => handleNavigate('/analytics')} className="flex flex-col items-center gap-1 text-slate-400">
           <Activity className="w-5 h-5" />
           <span className="text-[10px] font-bold">Analytics</span>
         </button>
-        <button onClick={() => navigate('/settings')} className="flex flex-col items-center gap-1 text-slate-400">
+        <button onClick={() => handleNavigate('/settings')} className="flex flex-col items-center gap-1 text-slate-400">
           <Settings className="w-5 h-5" />
           <span className="text-[10px] font-bold">Settings</span>
         </button>

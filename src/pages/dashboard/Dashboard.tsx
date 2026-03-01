@@ -18,6 +18,7 @@ import {
   X
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import { hapticFeedback } from '../../lib/haptics';
 
 const Dashboard = () => {
   const [isAway, setIsAway] = useState(false);
@@ -30,9 +31,22 @@ const Dashboard = () => {
     // Show notification after 2 seconds for demo
     const timer = setTimeout(() => {
       setShowNotification(true);
+      hapticFeedback.medium();
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleNavigate = (path: string) => {
+    hapticFeedback.light();
+    navigate(path);
+    setIsMenuOpen(false);
+  };
+
+  const handleToggleAway = (val: boolean) => {
+    hapticFeedback.medium();
+    setIsAway(val);
+    if (val) navigate('/away-mode');
+  };
 
   const activities = [
     { id: 1, type: 'delivery', title: 'Dell Laptop Delivered', time: 'Today, 2:34 PM', status: 'Accepted by priya • Order #FK-2891', img: 'https://picsum.photos/seed/laptop/100/100' },
@@ -72,12 +86,12 @@ const Dashboard = () => {
                   { icon: Package, label: 'Deliveries', path: '/delivery' },
                   { icon: Activity, label: 'Analytics', path: '/analytics' },
                   { icon: Shield, label: 'Security Settings', path: '/settings' },
-                  { icon: History, label: 'Activity Log', path: '/dashboard' },
-                  { icon: Info, label: 'Help & Support', path: '/settings' },
+                  { icon: History, label: 'Activity Log', path: '/delivery' },
+                  { icon: Info, label: 'Help & Support', path: '/help-support' },
                 ].map((item, i) => (
                   <button 
                     key={i} 
-                    onClick={() => { navigate(item.path); setIsMenuOpen(false); }}
+                    onClick={() => handleNavigate(item.path)}
                     className="w-full flex items-center gap-4 p-4 rounded-xl hover:bg-slate-50 text-slate-600 font-bold transition-colors"
                   >
                     <item.icon className="w-5 h-5" />
@@ -121,7 +135,7 @@ const Dashboard = () => {
         {/* Active/Away Toggle */}
         <div className="bg-white/10 backdrop-blur-md p-1 rounded-xl flex border border-white/20">
           <button 
-            onClick={() => setIsAway(false)}
+            onClick={() => handleToggleAway(false)}
             className={cn(
               "flex-1 py-2 text-sm font-bold rounded-lg transition-all",
               !isAway ? "bg-white text-primary shadow-lg" : "text-white/60"
@@ -130,7 +144,7 @@ const Dashboard = () => {
             Active
           </button>
           <button 
-            onClick={() => { setIsAway(true); navigate('/away-mode'); }}
+            onClick={() => handleToggleAway(true)}
             className={cn(
               "flex-1 py-2 text-sm font-bold rounded-lg transition-all",
               isAway ? "bg-white text-primary shadow-lg" : "text-white/60"
@@ -193,7 +207,7 @@ const Dashboard = () => {
             {[
               { icon: Users, label: 'Manage Family', color: 'bg-blue-50 text-blue-600', path: '/family' },
               { icon: Package, label: 'Delivery Access', color: 'bg-indigo-50 text-indigo-600', path: '/delivery-access' },
-              { icon: Shield, label: 'Backup Person', color: 'bg-emerald-50 text-emerald-600', path: '/backup' },
+              { icon: Shield, label: 'Backup Person', color: 'bg-emerald-50 text-emerald-600', path: '/backup-person' },
               { icon: Settings, label: 'Security', color: 'bg-orange-50 text-orange-600', path: '/settings' }
             ].map((action, i) => (
               <button key={i} onClick={() => navigate(action.path)} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center gap-3 hover:shadow-md transition-all">
@@ -233,23 +247,23 @@ const Dashboard = () => {
 
       {/* Bottom Nav */}
       <div className="fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto bg-white border-t border-slate-100 p-4 flex justify-around items-center z-30">
-        <button onClick={() => navigate('/dashboard')} className="flex flex-col items-center gap-1 text-primary">
+        <button onClick={() => handleNavigate('/dashboard')} className="flex flex-col items-center gap-1 text-primary">
           <HomeIcon className="w-5 h-5" />
           <span className="text-[10px] font-bold">Home</span>
         </button>
-        <button onClick={() => navigate('/family')} className="flex flex-col items-center gap-1 text-slate-400">
+        <button onClick={() => handleNavigate('/family')} className="flex flex-col items-center gap-1 text-slate-400">
           <Users className="w-5 h-5" />
           <span className="text-[10px] font-bold">Members</span>
         </button>
-        <button onClick={() => navigate('/delivery')} className="flex flex-col items-center gap-1 text-slate-400">
+        <button onClick={() => handleNavigate('/delivery')} className="flex flex-col items-center gap-1 text-slate-400">
           <Package className="w-5 h-5" />
           <span className="text-[10px] font-bold">Delivery</span>
         </button>
-        <button onClick={() => navigate('/analytics')} className="flex flex-col items-center gap-1 text-slate-400">
+        <button onClick={() => handleNavigate('/analytics')} className="flex flex-col items-center gap-1 text-slate-400">
           <Activity className="w-5 h-5" />
           <span className="text-[10px] font-bold">Analytics</span>
         </button>
-        <button onClick={() => navigate('/settings')} className="flex flex-col items-center gap-1 text-slate-400">
+        <button onClick={() => handleNavigate('/settings')} className="flex flex-col items-center gap-1 text-slate-400">
           <Settings className="w-5 h-5" />
           <span className="text-[10px] font-bold">Settings</span>
         </button>

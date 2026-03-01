@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, User, Plus, X, ShieldCheck, Phone, Mail } from 'lucide-react';
+import { hapticFeedback } from '../../lib/haptics';
 
 const BackupPerson = () => {
   const navigate = useNavigate();
@@ -10,11 +11,29 @@ const BackupPerson = () => {
     { id: 2, name: 'Meena Kumar', relation: 'Mother', status: 'Verified', phone: '+91 98765 43211', initial: 'MK' },
   ];
 
+  const handleBack = () => {
+    hapticFeedback.light();
+    navigate(-1);
+  };
+
+  const handleAdd = () => {
+    hapticFeedback.medium();
+    alert('Add Backup Person feature coming soon!');
+  };
+
+  const handleRemove = (name: string) => {
+    hapticFeedback.heavy();
+    if (confirm(`Are you sure you want to remove ${name} as a backup person?`)) {
+      hapticFeedback.success();
+      alert(`${name} removed successfully.`);
+    }
+  };
+
   return (
     <div className="flex-1 flex flex-col bg-slate-50">
       <div className="bg-white p-6 border-b border-slate-100">
         <div className="flex items-center gap-4 mb-2">
-          <button onClick={() => navigate(-1)} className="p-1">
+          <button onClick={handleBack} className="p-1">
             <ChevronLeft className="w-6 h-6 text-slate-600" />
           </button>
           <h2 className="text-xl font-bold">Backup Person</h2>
@@ -22,8 +41,11 @@ const BackupPerson = () => {
         <p className="text-xs text-slate-500 ml-10">Assign someone to handle deliveries when you're busy</p>
       </div>
 
-      <div className="p-6 space-y-6 flex-1 overflow-y-auto no-scrollbar">
-        <button className="w-full py-4 bg-primary/5 border border-dashed border-primary text-primary rounded-2xl font-bold flex items-center justify-center gap-2">
+      <div className="p-6 space-y-6 flex-1 overflow-y-auto no-scrollbar pb-24">
+        <button 
+          onClick={handleAdd}
+          className="w-full py-4 bg-primary/5 border border-dashed border-primary text-primary rounded-2xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-all"
+        >
           <Plus className="w-5 h-5" /> Add Backup Person
         </button>
 
@@ -46,7 +68,10 @@ const BackupPerson = () => {
                   </div>
                 </div>
               </div>
-              <button className="p-2 text-slate-300 hover:text-red-500 transition-colors">
+              <button 
+                onClick={() => handleRemove(person.name)}
+                className="p-2 text-slate-300 hover:text-red-500 transition-colors active:scale-90"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
