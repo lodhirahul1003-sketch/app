@@ -1,0 +1,5 @@
+{
+  "name": "Dvaari",
+  "description": "A smart doorbell companion app for secure deliveries and family connectivity.",
+  "requestFramePermissions": ["camera", "microphone"]
+}
